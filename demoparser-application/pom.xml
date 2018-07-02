@@ -1,0 +1,183 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dk.example.web</groupId>
+		<artifactId>demoparser</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>dk.example.web.demoparser</groupId>
+	<artifactId>demoparser-application</artifactId>
+	<packaging>pom</packaging>
+
+	<name>POM - demoparser application</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>dk.kmd.devops.maven.plugin</groupId>
+				<artifactId>envconfiguration-maven-plugin</artifactId>
+				<version>1.0.3</version>
+				<configuration>
+					<environments>
+						<environment>local</environment>
+						<environment>p0</environment>
+					</environments>
+					<sourceConfigDir>${basedir}/src/main/config</sourceConfigDir>
+					<attachArtifact>true</attachArtifact>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>generateEnv</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											dk.kmd.devops.maven.plugin
+										</groupId>
+										<artifactId>
+											envconfiguration-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.0,)
+										</versionRange>
+										<goals>
+											<goal>generateEnv</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute></execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<!-- | Developer profile + -->
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<id>compile</id>
+								<phase>compile</phase>
+								<configuration>
+									<target>
+										<property
+											file="${project.build.directory}/config/local/env.properties" />
+										<ant antfile="${project.build.directory}/config/local/build.xml">
+											<target name="domain.remove" />
+											<target name="domain.create" />
+										</ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>				
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sql-maven-plugin</artifactId>
+						<version>1.5</version>						
+						<dependencies>
+							<dependency>
+								<groupId>mysql</groupId>
+								<artifactId>mysql-connector-java</artifactId>
+								<version>5.1.9</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<driver>com.mysql.jdbc.Driver</driver>
+							<url>jdbc:mysql://localhost:3306/</url>
+							<username>root</username>
+							<password></password>
+							<forceMojoExecution>true</forceMojoExecution>
+						</configuration>
+						<executions>
+							<execution>
+								<id>create-db</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<autocommit>true</autocommit>
+									<srcFiles>
+										<srcFile>${project.build.directory}/config/local/create-database.sql</srcFile>
+									</srcFiles>
+								</configuration>
+							</execution>
+							<execution>
+								<id>create-tables</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<autocommit>true</autocommit>
+									<sqlCommand>use demo; #--;</sqlCommand>
+									<srcFiles>
+										<srcFile>${project.build.directory}/config/local/create-tables.sql</srcFile>
+									</srcFiles>
+								</configuration>
+							</execution>
+							<execution>
+								<id>insert-data</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<sqlCommand>use demo; #--;</sqlCommand>
+									<orderFile>ascending</orderFile>
+									<fileset>
+										<basedir>${project.build.directory}/config/local/</basedir>
+										<includes>
+											<include>test-data.sql</include>
+										</includes>
+									</fileset>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
+

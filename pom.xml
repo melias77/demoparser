@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>dk.kmd.devops.build</groupId>
+		<artifactId>master-pom</artifactId>
+		<version>1.0.2-SNAPSHOT</version>
+	</parent>
+
+	<groupId>dk.example.web</groupId>
+	<artifactId>demoparser</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+	<!-- 
+		<org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+	 -->
+		<org.spring-boot.version>1.5.6.RELEASE</org.spring-boot.version>
+		<org.apache.commons-io.version>2.5</org.apache.commons-io.version>
+		<javax.mail.version>1.4.7</javax.mail.version>
+		<org.slf4j.slf4j-log4j12>1.5.2</org.slf4j.slf4j-log4j12>
+		<org.slf4j.slf4j-api>1.5.2</org.slf4j.slf4j-api>
+		<org.apache.commons-lang.version>2.6</org.apache.commons-lang.version>
+		<log4j.version>1.2.14</log4j.version>
+		<info.cukes.version>1.2.4</info.cukes.version>
+	</properties>
+
+	<name>POM - demoparser application</name>
+
+	<developers>
+		<developer>
+			<id>1</id>
+			<name>Morten</name>
+			<email>mnb@elsevier.dk</email>
+			<organization>Elsevier</organization>
+			<organizationUrl>http://www.elsevier.dk</organizationUrl>
+		</developer>		
+	</developers>
+
+	<organization>
+		<name>Elsevier</name>
+		<url>http://www.elsevier.dk</url>
+	</organization>
+
+	<scm>
+		<connection>scm:svn:http://svn.kmd.dk:3690/svn/devops/source/projects/demoparser/trunk</connection>
+		<developerConnection>scm:http://svn.kmd.dk:3690/svn/devops/source/projects/demoparser/trunk</developerConnection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>kmdw7315a</id>
+			<name>kmdw7315a-releases</name>
+			<url>http://artifactory.kmd.dk/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>kmdw7315a</id>
+			<name>kmdw7315a-snapshots</name>
+			<url>http://artifactory.kmd.dk/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<ciManagement>
+		<system>Bamboo</system>
+		<url>http://bamboo.kmd.dk/</url>
+		<notifiers>
+			<notifier>
+				<address>tak@kmd.dk</address>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	
+	<modules>
+		<module>demoparser-application</module>
+		<module>demoparser-rest</module>
+	</modules>
+</project>
