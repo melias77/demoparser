@@ -78,7 +78,7 @@ public class ForfatterFullnameParserHelperImpl extends AbstractTextParserHelper<
 
 	}
 
-	public List<String> extractFullnamesFromString(String fullNameStringLst) {
+	private List<String> extractFullnamesFromString(String fullNameStringLst) {
 
 		List<String> fullNameList = new ArrayList<String>();
 
