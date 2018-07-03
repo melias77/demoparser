@@ -76,12 +76,12 @@ RUN apt-get clean && \
 
 #Configure Maven repos settings
 RUN mkdir -p /home/dev/.m2
-COPY settings.xml /home/dev/.m2/settings.xml
+#COPY settings.xml /home/dev/.m2/settings.xml
 RUN sudo chown -R dev:dev /home/dev
 
-# Clone our private GitHub Repository
-#RUN mkdir -p /home/dev/projects/poms
-#RUN git clone https://github.com/melias77/poms.git /home/dev/projects/poms
-
+# Building continuous integration (CI) tools
+RUN mkdir -p /home/dev/projects/devops
+RUN git clone https://github.com/melias77/devops.git /home/dev/projects/devops
+RUN cd /home/dev/devops && mvn clean install
 
 # CMD    ["echo", "Done......."]
