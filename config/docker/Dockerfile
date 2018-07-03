@@ -79,6 +79,8 @@ RUN mkdir -p /home/dev/.m2
 #COPY settings.xml /home/dev/.m2/settings.xml
 RUN sudo chown -R dev:dev /home/dev
 
+USER dev
+
 # Building continuous integration (CI) tools
 RUN mkdir -p /home/dev/projects/devops
 RUN git clone https://github.com/melias77/devops.git /home/dev/projects/devops
